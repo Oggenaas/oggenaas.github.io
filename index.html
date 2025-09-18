@@ -3,13 +3,381 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>My Portfolio</title>
-  <link rel="stylesheet" href="style.css">
+  <title>Oskar Nääs - Portfolio</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      line-height: 1.6;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* Animated background particles */
+    .bg-animation {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      overflow: hidden;
+    }
+
+    .particle {
+      position: absolute;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 50%;
+      animation: float 6s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-20px) rotate(180deg); }
+    }
+
+    header {
+      background: rgba(0, 0, 0, 0.1);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      color: #fff;
+      padding: 2rem;
+      text-align: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    }
+
+    header h1 {
+      font-size: 3rem;
+      font-weight: 700;
+      background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1, #96ceb4);
+      background-size: 400% 400%;
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: gradientShift 4s ease infinite;
+      margin-bottom: 0.5rem;
+    }
+
+    @keyframes gradientShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    header p {
+      font-size: 1.2rem;
+      margin-bottom: 2rem;
+      color: rgba(255, 255, 255, 0.8);
+      animation: fadeInUp 1s ease 0.5s both;
+    }
+
+    nav {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      animation: fadeInUp 1s ease 1s both;
+    }
+
+    nav a {
+      color: #fff;
+      text-decoration: none;
+      padding: 12px 24px;
+      border-radius: 50px;
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    nav a::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+      transition: left 0.3s ease;
+      z-index: -1;
+    }
+
+    nav a:hover::before {
+      left: 0;
+    }
+
+    nav a:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+    }
+
+    main {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+
+    section {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(20px);
+      margin: 3rem 0;
+      padding: 3rem;
+      border-radius: 20px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      opacity: 0;
+      transform: translateY(50px);
+      animation: slideInUp 0.8s ease forwards;
+    }
+
+    section:nth-child(1) { animation-delay: 0.2s; }
+    section:nth-child(2) { animation-delay: 0.4s; }
+    section:nth-child(3) { animation-delay: 0.6s; }
+
+    @keyframes slideInUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    h2 {
+      color: #333;
+      font-size: 2.5rem;
+      margin-bottom: 2rem;
+      position: relative;
+      display: inline-block;
+    }
+
+    h2::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 0;
+      width: 0;
+      height: 4px;
+      background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+      border-radius: 2px;
+      animation: expandWidth 1s ease 1s forwards;
+    }
+
+    @keyframes expandWidth {
+      to { width: 100%; }
+    }
+
+    #about {
+      text-align: center;
+    }
+
+    #about p {
+      font-size: 1.2rem;
+      color: #666;
+      max-width: 600px;
+      margin: 0 auto;
+      line-height: 1.8;
+    }
+
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+
+    .project {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 2rem;
+      border-radius: 15px;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .project::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+      transform: rotate(45deg);
+      transition: all 0.5s;
+      opacity: 0;
+    }
+
+    .project:hover::before {
+      animation: shimmer 1s ease;
+    }
+
+    @keyframes shimmer {
+      0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); opacity: 1; }
+      100% { transform: translateX(100%) translateY(100%) rotate(45deg); opacity: 0; }
+    }
+
+    .project:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+    }
+
+    .project h3 {
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .project p {
+      opacity: 0.9;
+      line-height: 1.6;
+    }
+
+    .contact-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+
+    .contact-item {
+      background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+      color: white;
+      padding: 1.5rem;
+      border-radius: 15px;
+      text-align: center;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      display: block;
+    }
+
+    .contact-item:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+    }
+
+    .contact-item strong {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-size: 1.1rem;
+    }
+
+    footer {
+      text-align: center;
+      padding: 3rem 2rem;
+      color: rgba(255, 255, 255, 0.8);
+      background: rgba(0, 0, 0, 0.1);
+      backdrop-filter: blur(20px);
+      margin-top: 4rem;
+    }
+
+    /* Scroll indicator */
+    .scroll-indicator {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 0%;
+      height: 4px;
+      background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+      z-index: 1000;
+      transition: width 0.1s ease;
+    }
+
+    /* Mobile responsiveness */
+    @media (max-width: 768px) {
+      header h1 {
+        font-size: 2rem;
+      }
+
+      nav {
+        flex-direction: column;
+        gap: 1rem;
+      }
+
+      main {
+        padding: 1rem;
+      }
+
+      section {
+        padding: 2rem 1.5rem;
+      }
+
+      h2 {
+        font-size: 2rem;
+      }
+
+      .projects-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Loading animation */
+    .loader {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+      animation: fadeOut 1s ease 2s forwards;
+    }
+
+    .loader-text {
+      color: white;
+      font-size: 2rem;
+      font-weight: bold;
+      animation: pulse 1s ease infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+
+    @keyframes fadeOut {
+      to {
+        opacity: 0;
+        visibility: hidden;
+      }
+    }
+  </style>
 </head>
 <body>
+  <div class="loader">
+    <div class="loader-text">Loading Portfolio...</div>
+  </div>
+
+  <div class="scroll-indicator"></div>
+
+  <div class="bg-animation"></div>
+
   <header>
     <h1>Oskar Nääs</h1>
-    <p>Web Developer | Student | Programmer </p>
+    <p>Web Developer | Student | Programmer</p>
     <nav>
       <a href="#about">About</a>
       <a href="#projects">Projects</a>
@@ -17,36 +385,175 @@
     </nav>
   </header>
 
-  <section id="about">
-    <h2>About Me</h2>
-    <p>
-      Hey, I'm Oskar Nääs. Here you can check out what I am working on as well as my previous projects.  
-      Mention your skills, background, and what excites you.
-    </p>
-  </section>
+  <main>
+    <section id="about">
+      <h2>About Me</h2>
+      <p>
+        Hey, I'm Oskar Nääs! Welcome to my digital playground where creativity meets code. 
+        I'm passionate about crafting beautiful, functional web experiences that make a difference. 
+        From elegant user interfaces to robust backend systems, I love bringing ideas to life through technology.
+        Currently studying and constantly learning new technologies to stay at the forefront of web development.
+      </p>
+    </section>
 
-  <section id="projects">
-    <h2>Projects</h2>
-    <div class="project">
-      <h3>Project Title 1</h3>
-      <p>Short description of the project. What technologies you used, what you built.</p>
-    </div>
-    <div class="project">
-      <h3>Project Title 2</h3>
-      <p>Another project description. Add links if available.</p>
-    </div>
-  </section>
+    <section id="projects">
+      <h2>My Projects</h2>
+      <div class="projects-grid">
+        <div class="project">
+          <h3>Interactive Web App</h3>
+          <p>A dynamic single-page application built with modern JavaScript frameworks. Features responsive design, real-time updates, and seamless user interactions.</p>
+        </div>
+        <div class="project">
+          <h3>E-Commerce Platform</h3>
+          <p>Full-stack e-commerce solution with payment integration, inventory management, and admin dashboard. Built with React and Node.js.</p>
+        </div>
+        <div class="project">
+          <h3>Mobile-First Website</h3>
+          <p>Responsive portfolio website optimized for mobile devices. Implements progressive web app features and advanced CSS animations.</p>
+        </div>
+        <div class="project">
+          <h3>API Development</h3>
+          <p>RESTful API service with authentication, data validation, and comprehensive documentation. Designed for scalability and performance.</p>
+        </div>
+      </div>
+    </section>
 
-  <section id="contact">
-    <h2>Contact</h2>
-    <p>Email: <a href="mailto:oskar.naas@live.se">oskar.naas@live.se</a></p>
-    <p>GitHub: <a href="https://github.com/username" target="_blank">@username</a></p>
-    <p>LinkedIn: <a href="https://linkedin.com/in/username" target="_blank">Your LinkedIn</a></p>
-    <p>Instagram: <a href="https://instagram.com/in/oggenaas" target="_blank">Your LinkedIn</a></p>
-  </section>
+    <section id="contact">
+      <h2>Get In Touch</h2>
+      <div class="contact-grid">
+        <a href="mailto:oskar.naas@live.se" class="contact-item">
+          <strong>Email</strong>
+          oskar.naas@live.se
+        </a>
+        <a href="https://github.com/username" target="_blank" class="contact-item">
+          <strong>GitHub</strong>
+          @username
+        </a>
+        <a href="https://linkedin.com/in/username" target="_blank" class="contact-item">
+          <strong>LinkedIn</strong>
+          Connect with me
+        </a>
+        <a href="https://instagram.com/oggenaas" target="_blank" class="contact-item">
+          <strong>Instagram</strong>
+          @oggenaas
+        </a>
+      </div>
+    </section>
+  </main>
 
   <footer>
-    <p>© 2025 Your Name</p>
+    <p>© 2025 Oskar Nääs • Crafted with passion and code</p>
   </footer>
+
+  <script>
+    // Create animated background particles
+    function createParticles() {
+      const bgAnimation = document.querySelector('.bg-animation');
+      for (let i = 0; i < 50; i++) {
+        const particle = document.createElement('div');
+        particle.className = 'particle';
+        particle.style.left = Math.random() * 100 + '%';
+        particle.style.top = Math.random() * 100 + '%';
+        particle.style.width = Math.random() * 4 + 2 + 'px';
+        particle.style.height = particle.style.width;
+        particle.style.animationDelay = Math.random() * 6 + 's';
+        particle.style.animationDuration = (Math.random() * 3 + 3) + 's';
+        bgAnimation.appendChild(particle);
+      }
+    }
+
+    // Smooth scrolling for navigation links
+    document.querySelectorAll('nav a').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+    });
+
+    // Scroll progress indicator
+    function updateScrollIndicator() {
+      const scrollTop = window.pageYOffset;
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const scrollPercent = (scrollTop / docHeight) * 100;
+      document.querySelector('.scroll-indicator').style.width = scrollPercent + '%';
+    }
+
+    // Intersection observer for animations
+    const observerOptions = {
+      threshold: 0.1,
+      rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.style.animationPlayState = 'running';
+        }
+      });
+    }, observerOptions);
+
+    // Initialize everything when DOM is loaded
+    document.addEventListener('DOMContentLoaded', function() {
+      createParticles();
+      
+      // Observe all sections for animations
+      document.querySelectorAll('section').forEach(section => {
+        observer.observe(section);
+      });
+
+      // Add scroll event listener
+      window.addEventListener('scroll', updateScrollIndicator);
+
+      // Add project hover effects
+      document.querySelectorAll('.project').forEach(project => {
+        project.addEventListener('mouseenter', function() {
+          this.style.background = 'linear-gradient(135deg, #764ba2 0%, #667eea 100%)';
+        });
+        
+        project.addEventListener('mouseleave', function() {
+          this.style.background = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
+        });
+      });
+    });
+
+    // Add some interactive cursor effects
+    document.addEventListener('mousemove', (e) => {
+      const cursor = document.createElement('div');
+      cursor.className = 'cursor-trail';
+      cursor.style.cssText = `
+        position: fixed;
+        width: 4px;
+        height: 4px;
+        background: rgba(255, 255, 255, 0.5);
+        border-radius: 50%;
+        pointer-events: none;
+        z-index: 9999;
+        left: ${e.clientX}px;
+        top: ${e.clientY}px;
+        animation: cursorFade 1s ease-out forwards;
+      `;
+      
+      document.body.appendChild(cursor);
+      
+      setTimeout(() => {
+        if (cursor.parentNode) {
+          cursor.parentNode.removeChild(cursor);
+        }
+      }, 1000);
+    });
+
+    // Add CSS for cursor trail animation
+    const style = document.createElement('style');
+    style.textContent = `
+      @keyframes cursorFade {
+        to {
+          opacity: 0;
+          transform: scale(3);
+        }
+      }
+    `;
+    document.head.appendChild(style);
+  </script>
 </body>
 </html>
